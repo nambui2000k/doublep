@@ -4,5 +4,5 @@ uploads
 docker-compose.yml
 .docker/data
 .dockerignore
-.package-lock.json
+package-lock.json
 .env
