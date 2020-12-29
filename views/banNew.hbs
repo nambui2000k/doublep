@@ -1,0 +1,332 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <title>Double P-Báo cáo bài viết</title>
+    <link rel="icon" type="image/png" href="/images/icons/DoubleP.png" />
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css"
+        integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.13.0/css/all.min.css">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.13.0/js/all.min.js"></script>
+    <link rel="stylesheet" href="/css/style.css">
+</head>
+
+<body>
+    <div>
+
+
+        <div class="wrapper">
+            <nav id="sidebar">
+
+                <div class="sidebar-header">
+                    <h2 style="font-weight: bold">Double P</h2>
+                </div>
+                <ul class="lisst-unstyled components">
+
+                    <li id="user" method="get">
+                        <a href="/user">Quản lý tài khoản</a>
+                    </li>
+
+                    <li id="typePet" method="get">
+                        <a href="#typePetMenu" data-toggle="collapse" aria-expanded="false" class="dropdown-toggle">Quản
+                            lý
+                            giống loài</a>
+                        <ul class="collapse list-unstyled" id="typePetMenu">
+                            <li id="typePet" method="get">
+                                <a href="/typePet">Loài</a>
+                            </li>
+                            <li id="breed" method="get">
+                                <a href="/breed">Giống</a>
+                            </li>
+
+                        </ul>
+                    </li>
+
+                    <li id="ban" method="get" class="active">
+                        <a href="#pageSubmenu" data-toggle="collapse" class="dropdown-toggle">Báo cáo</a>
+                        <ul class="collapse list-unstyled" id="pageSubmenu">
+                            <li id="ban" method="get">
+                                <a href="/ban">Báo cáo bài viết</a>
+                            </li>
+                            <li>
+                                <a href="/banComment">Báo cáo bình luận</a>
+                            </li>
+
+
+                        </ul>
+                    </li>
+
+                    <li id="ban" method="get">
+                        <a href="#statistical" data-toggle="collapse" class="dropdown-toggle">Thống kê</a>
+                        <ul class="collapse list-unstyled" id="statistical">
+                            <li id="ban" method="get">
+                                <a href="/statisticalNew">Theo bài viết báo cáo</a>
+                            </li>
+                            <li>
+                                <a href="/statisticalComment">Theo bình luận báo cáo</a>
+                            </li>
+                        </ul>
+                    </li>
+
+
+                </ul>
+            </nav>
+
+            <div id="content">
+
+                <nav class="navbar navbar-expand-lg navbar-light bg-light">
+                    <div class="container-fluid">
+                        <button type="button" id="sidebarCollapse" class="btn btn-info">
+                            <i class="fas fa-align-left"></i>
+                            <span>Menu</span>
+
+                        </button>
+                    </div>
+                </nav>
+                <div class="navbar navbar-expand-lg navbar-light bg-light">
+                    {{#each pagination}}
+                    <tr>
+                        <nav aria-label="Page navigation example">
+                            <ul class="pagination">
+                                <li class="page-item"><a class="page-link" href="#">{{this}}</a></li>
+                            </ul>
+                        </nav>
+                    </tr>
+
+                    {{/each}}
+                </div>
+
+                <table class="table table-hover">
+                    <thead class="thead-gray">
+                        <tr class="bg-info">
+                            <th style="color: white;">Ảnh bài viết</th>
+                            <th style="color: white;">Chủ sở hữu</th>
+                            <th style="color: white;">Nội dung</th>
+                            <th style="color: white;">Số lượng báo cáo</th>
+                            <th style="text-align: center;color: white">Tác vụ</th>
+                        </tr>
+                        {{#each listNews}}
+                        <tr>
+                            <td><img src="{{this.image}}" style="object-fit: container; object-position: center; width: 70px;height: 70px;"></td>
+                            <td style="width: 20%">{{this.account.fullName}}</td>
+                            <td style="width: 20%">{{this.content}}</td>
+                            <td style="width: 15%">{{this.idReporters.length}}</td>
+                            <td style="text-align: center;width: 35%;">
+                                <button data-toggle="modal" data-target="#detailNew" onclick="
+                                    document.getElementsByName('fullName')[0].value = '{{this.account.fullName}}';
+                                    document.getElementsByName('content')[0].value = '{{this.content}}';
+                                    document.getElementsByName('favoritePersons')[0].value = '{{this.favoritePersons.length}}';
+                                    document.getElementsByName('idReporters')[0].value = '{{this.idReporters.length}}';
+                                    document.getElementsByName('idComments')[0].value = '{{this.idComments.length}}';
+                                    var imagesList = '{{this.imageList}}'.split(',');
+                                    var listImagesDocument = document.getElementById('listImages');
+                                    listImagesDocument.innerHTML=''
+
+                                    for(let i = 0;i<imagesList.length;i++){
+                                         var containerImage = document.createElement('div');
+                                         if(i==0){
+                                             containerImage.setAttribute('class','carousel-item active align-content-lg-center')
+                                             containerImage.setAttribute('style','height: 300px;align-content: center')
+                                             containerImage.setAttribute('name','containerImage')
+                                             listImagesDocument.appendChild(containerImage) 
+                                             var getContainerImage = document.getElementsByName('containerImage')[i]
+                                             var image = document.createElement('img')
+                                             image.setAttribute('class','d-block w-100')
+                                             image.setAttribute('name','images')
+                                             image.setAttribute('src',imagesList[i])
+                                            getContainerImage.appendChild(image);
+                                         }else{
+                                             containerImage.setAttribute('class','carousel-item align-content-lg-center')
+                                             containerImage.setAttribute('name','containerImage')
+                                             listImagesDocument.appendChild(containerImage) 
+                                             var getContainerImage = document.getElementsByName('containerImage')[i]
+                                             var image = document.createElement('img')
+                                             image.setAttribute('class','mx-auto d-block')
+                                             image.setAttribute('src',imagesList[i])
+                                             image.setAttribute('name','images')
+                                              image.setAttribute('style','height: 300px ;align-content: center')
+                                            getContainerImage.appendChild(image);
+                                         }
+                                    };
+                                    var a = document.createElement('a')
+                                    a.setAttribute('class','carousel-control-prev')
+                                    a.setAttribute('href','#carouselExampleControls')
+                                    a.setAttribute('role','button')
+                                    a.setAttribute('data-slide','prev')
+                                    var spanFirst = document.createElement('span')
+                                    spanFirst.setAttribute('class','carousel-control-prev-icon')
+                                    spanFirst.setAttribute('aria-hidden','true')
+                                    a.appendChild(spanFirst);
+                                    var spanSencond = document.createElement('span')
+                                    spanSencond.setAttribute('class','sr-only')
+                                    spanSencond.innerHTML = 'Previous'
+                                    a.appendChild(spanSencond);
+                                    listImagesDocument.appendChild(a)
+
+                                    var a = document.createElement('a')
+                                    a.setAttribute('class','carousel-control-next')
+                                    a.setAttribute('href','#carouselExampleControls')
+                                    a.setAttribute('role','button')
+                                    a.setAttribute('data-slide','next')
+                                    var spanFirst = document.createElement('span')
+                                    spanFirst.setAttribute('class','carousel-control-next-icon')
+                                    spanFirst.setAttribute('aria-hidden','true')
+                                    a.appendChild(spanFirst);
+                                    var spanSencond = document.createElement('span')
+                                    spanSencond.setAttribute('class','sr-only')
+                                    spanSencond.innerHTML = 'Next'
+                                    a.appendChild(spanSencond);
+                                    listImagesDocument.appendChild(a)
+                                
+                                    console.log(listImagesDocument.innerHTML)
+                                    " type="submit" class="btn btn-primary" style="width: 80px">Xem
+                                </button>
+                                <button data-toggle="modal" data-target="#banNew" type="submit" class="btn btn-danger"
+                                    onclick="
+                                            document.getElementsByName('id')[0].value = '{{this._id}}';
+                                            ">Thu hồi
+                                </button>
+                            </td>
+                        </tr>
+
+                        {{/each}}
+                    </thead>
+                </table>
+
+
+            </div>
+
+        </div>
+
+
+    </div>
+
+   <form action="/detailNew" method="post">
+    <div class="modal fade" id="detailNew" role="dialog" aria-labelledby="exampleModalLabel"
+         aria-hidden="true">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="exampleModalLabel">Thông tin</h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+
+                <div class="modal-body">
+                    <div id="carouselExampleControls"  class="carousel slide" data-ride="carousel">
+                        <div class="carousel-inner" id="listImages" >
+                          
+                        </div>
+                        <a class="carousel-control-prev" href="#carouselExampleControls" role="button"
+                           data-slide="prev">
+                            <span class="carousel-control-prev-icon" aria-hidden="true"></span>
+                            <span class="sr-only">Previous</span>
+                        </a>
+                        <a class="carousel-control-next" href="#carouselExampleControls" role="button"
+                           data-slide="next">
+                            <span class="carousel-control-next-icon" aria-hidden="true"></span>
+                            <span class="sr-only">Next</span>
+                        </a>
+                    </div>
+
+                    <div class="input-group mb-3">
+                        <div class="input-group-prepend">
+                            <span class="input-group-text" id="basic-addon1" style="width: 150px">Chủ sở hữu</span>
+                        </div>
+                        <input type="text" name="fullName" disabled class="form-control" aria-describedby="basic-addon1"
+                               required>
+                    </div>
+                    <div class="input-group mb-3">
+                        <div class="input-group-prepend">
+                            <span class="input-group-text" id="basic-addon1" style="width: 150px">Nội dung</span>
+                        </div>
+                        <input type="text" name="content" disabled class="form-control"
+                               aria-describedby="basic-addon1" required>
+                    </div>
+                    <div class="input-group mb-3">
+                        <div class="input-group-prepend">
+                            <span class="input-group-text" id="basic-addon1" style="width: 150px">Số người thích</span>
+                        </div>
+                        <input type="text" name="favoritePersons" disabled class="form-control"
+                               aria-describedby="basic-addon1" required>
+                    </div>
+
+                    <div class="input-group mb-3">
+                        <div class="input-group-prepend">
+                            <span class="input-group-text" id="basic-addon1" style="width: 150px">Số báo cáo</span>
+                        </div>
+                        <input type="text" name="idReporters" disabled class="form-control"
+                               aria-describedby="basic-addon1" required>
+                    </div>
+
+                    <div class="input-group mb-3">
+                        <div class="input-group-prepend">
+                            <span class="input-group-text" id="basic-addon1" style="width: 150px">Số bình luận</span>
+                        </div>
+                        <input type="text" name="idComments" disabled class="form-control"
+                               aria-describedby="basic-addon1" required>
+                    </div>
+
+                </div>
+
+            </div>
+        </div>
+    </div>
+</form>
+
+
+    <div class="modal fade" id="banNew" tabindex="-1">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="banNew">Xác nhận thu hồi bài viết</h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body">
+                    Bạn có chắc muốn thu hồi bài viết này?
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Hủy</button>
+                    <form action="/ban/isLocked" method="post">
+                        <button type="submit" name="id" value="{{this._id}}" class="btn btn-danger"
+                            style="width: 120px">
+                            Thu hồi
+                        </button>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+
+
+    </div>
+
+
+    <script src="https://code.jquery.com/jquery-3.2.1.slim.min.js"
+        integrity="sha384-KJ3o2DKtIkvYIK3UENzmM7KCkRr/rE9/Qpg6aAZGJwFDMVNA/GpGFF93hXpG5KkN"
+        crossorigin="anonymous"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js"
+        integrity="sha384-ApNbgh9B+Y1QKtv3Rn7W3mgPxhU9K/ScQsAP7hUibX39j7fakFPskvXusvfa0b4Q"
+        crossorigin="anonymous"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js"
+        integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl"
+        crossorigin="anonymous"></script>
+
+    <script>
+
+        $(document).ready(function () {
+            $('#sidebarCollapse').on('click', function () {
+                $('#sidebar').toggleClass('active');
+                $(this).toggleClass('active');
+            });
+        });
+
+    </script>
+
+
+</body>
+
+</html>

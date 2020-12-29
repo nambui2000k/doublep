@@ -1,0 +1,234 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Double P-Quản lý giống loài</title>
+    <link rel="icon" type="image/png" href="/images/icons/DoubleP.png"/>
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css" integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.13.0/css/all.min.css">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.13.0/js/all.min.js"></script>
+    <link rel="stylesheet" href="/css/style.css">
+    <link rel="stylesheet" href="/images/icons/xoa.png">
+</head>
+<body>
+
+
+<div class="wrapper">
+
+    <nav id="sidebar">
+
+        <div class="sidebar-header">
+            <h2 style="font-weight: bold" >Double P</h2>
+        </div>
+
+        <ul class="lisst-unstyled components">
+
+            <li id="user" method="get">
+                <a href="/user">Quản lý tài khoản</a>
+            </li>
+
+            <li id="typePet" method="get" class="active">
+                <a href="#typePetMenu" data-toggle="collapse" aria-expanded="false" class="dropdown-toggle">Quản lý giống loài</a>
+                <ul class="collapse list-unstyled" id="typePetMenu">
+                    <li id="typePet" method="get" >
+                        <a href="/typePet" >Loài</a>
+                    </li>
+                    <li id="breed" method="get">
+                        <a href="/breed">Giống</a>
+                    </li>
+
+                </ul>
+            </li>
+
+
+            <li action="/banNew" id="banNew" method="get" >
+                <a href="#pageSubmenu" data-toggle="collapse" aria-expanded="false" class="dropdown-toggle">Báo cáo</a>
+                <ul class="collapse list-unstyled" id="pageSubmenu">
+                    <li>
+                        <a href="/ban" >Báo cáo bài viết</a>
+                    </li>
+                    <li>
+                        <a href="/banComment">Báo cáo bình luận</a>
+                    </li>
+
+
+                </ul>
+            </li>
+
+            <li id="ban" method="get">
+                <a href="#statistical" data-toggle="collapse" class="dropdown-toggle">Thống kê</a>
+                <ul class="collapse list-unstyled" id="statistical">
+                    <li id="ban" method="get">
+                        <a href="/statisticalNew">Theo bài viết báo cáo</a>
+                    </li>
+                    <li>
+                        <a href="/statisticalComment">Theo bình luận báo cáo</a>
+                    </li>
+                </ul>
+            </li>
+
+        </ul>
+    </nav>
+
+
+    <div id="content">
+
+        <nav class="navbar navbar-expand-lg navbar-light bg-light">
+            <div class="container-fluid">
+                <button type="button" id="sidebarCollapse" class="btn  btn-info">
+                    <i class="fas fa-align-left"></i>
+                    <span>Menu</span>
+
+                </button>
+            </div>
+        </nav>
+
+        <nav class="navbar navbar-light bg-light">
+            <form  class="form-inline" action="/typePet/createType" method="post">
+                <input class="form-control mr-sm-2" type="search" name="nameType" placeholder="Loài" aria-label="Search">
+                <textarea class="form-control mr-sm-2" type="text" style="height: 40px; width: 300px" name="description" placeholder="Miêu tả" aria-label="Search"></textarea>
+                <button class="btn btn-outline-success my-2 my-sm-0" type="submit">Thêm</button>
+            </form>
+        </nav>
+            <table class="table table-hover">
+                <thead class="thead-gray">
+                <tr class="bg-info">
+                    <th style="color: white;width: 30%">Tên</th>
+                    <th style="color: white;width: 30%">Số lượng giống</th>
+
+                   <th style="color:white;text-align: center">Tác vụ</th>
+                </tr>
+                {{#each typeList}}
+                    <tr>
+                        <td>{{this.name}}</td>
+                        <td>{{this.idBreeds.length}}</td>
+
+                        <td style="text-align: center">
+                            <button class="btn btn-light" style="background-color: #17a2b8;color: white"  data-toggle="modal" , data-target="#detailTypePet", onclick="
+                                    document.getElementsByName('nameTypeDetail')[0].value = '{{this.name}}';
+                                    document.getElementsByName('descriptionViewDetail')[0].value = '{{this.description}}';
+                                    ">Xem thông tin</button>
+                            <button  class="btn btn-warning" data-toggle="modal" data-target="#updateTypePet"  onclick="
+                                    document.getElementsByName('nameTypeUpdate')[0].value = '{{this.name}}';
+                                    document.getElementsByName('descriptionView')[0].value = '{{this.description}}';
+                                    document.getElementsByName('idUpdate')[0].value = '{{this._id}}';
+                                    ">Sửa</button>
+                            <button  class="btn btn-danger" data-toggle="modal" data-target="#exampleModal" onclick="
+                                    document.getElementsByName('id')[0].value = '{{this._id}}';
+                                    ">Xóa</button>
+                        </td>
+                    </tr>
+                {{/each}}
+                </thead>
+            </table>
+
+
+    </div>
+
+</div>
+
+<div class="modal fade" id="exampleModal" tabindex="-1" >
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="exampleModalLabel">Xác nhận xóa</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                Bạn có chắc muốn xóa loài này ?
+            </div>
+            <div class="modal-footer" >
+                <button type="button" class="btn btn-secondary" data-dismiss="modal">Hủy</button>
+                <form method="post" action="/typePet/deleteType">
+                    <input type="hidden" name="id" value="{{this._id}}">
+                <button  type="submit" class="btn btn-primary">Xóa</button>
+                </form>
+
+            </div>
+        </div>
+    </div>
+</div>
+
+
+<form action="/typePet/update" method="post">
+<div class="modal fade" id="updateTypePet"   role="dialog">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="updateTypePet">Cập nhập loài</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <div class="input-group mb-3">
+                    <div class="input-group-prepend">
+                        <span class="input-group-text" id="basic-addon1">Tên loài</span>
+                    </div>
+                    <input type="text" name="nameTypeUpdate" class="form-control" aria-describedby="basic-addon1" required>
+                </div>
+                <textarea type="text" name="descriptionView" style="height: 300px"  class="form-control" aria-describedby="basic-addon1" required></textarea>
+            </div>
+            <div class="modal-footer">
+                <input type="hidden" name="idUpdate" value="{{this._id}}">
+                <button type="submit"  class="btn btn-secondary">Sửa</button>
+            </div>
+
+        </div>
+    </div>
+</div>
+</form>
+
+<div class="modal fade" id="detailTypePet"   role="dialog">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="detailTypePet">Thông tin</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <div class="input-group mb-3">
+                    <div class="input-group-prepend">
+                        <span class="input-group-text" id="basic-addon1">Tên loài</span>
+                    </div>
+                    <input disabled type="text" name="nameTypeDetail" class="form-control" aria-describedby="basic-addon1" required>
+                </div>
+                <textarea disabled type="text" name="descriptionViewDetail" style="height: 300px"  class="form-control" aria-describedby="basic-addon1" required></textarea>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+
+{{#if isShow}}
+    <script type="text/javascript">
+        alert("{{alertMessage}}")
+    </script>
+{{/if}}
+
+</div>
+
+
+
+<script src="https://code.jquery.com/jquery-3.2.1.slim.min.js" integrity="sha384-KJ3o2DKtIkvYIK3UENzmM7KCkRr/rE9/Qpg6aAZGJwFDMVNA/GpGFF93hXpG5KkN" crossorigin="anonymous"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js" integrity="sha384-ApNbgh9B+Y1QKtv3Rn7W3mgPxhU9K/ScQsAP7hUibX39j7fakFPskvXusvfa0b4Q" crossorigin="anonymous"></script>
+<script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js" integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl" crossorigin="anonymous"></script>
+
+<script>
+
+    $(document).ready(function () {
+        $('#sidebarCollapse').on('click', function () {
+            $('#sidebar').toggleClass('active');
+            $(this).toggleClass('active');
+        });
+    });
+
+</script>
+
+
+</body>
+</html>

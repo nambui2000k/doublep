@@ -1,0 +1,223 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Double P-Báo cáo bình luận</title>
+    <link rel="icon" type="image/png" href="/images/icons/DoubleP.png"/>
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css"
+          integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.13.0/css/all.min.css">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.13.0/js/all.min.js"></script>
+    <link rel="stylesheet" href="/css/style.css">
+</head>
+<body>
+
+<div class="wrapper">
+
+    <nav id="sidebar">
+
+        <div class="sidebar-header">
+            <h2 style="font-weight: bold">Double P</h2>
+        </div>
+        <ul class="lisst-unstyled components">
+
+            <li id="user" method="get">
+                <a href="/user">Quản lý tài khoản</a>
+            </li>
+
+            <li id="typePet" method="get" >
+                <a href="#typePetMenu" data-toggle="collapse" aria-expanded="false" class="dropdown-toggle">Quản lý giống loài</a>
+                <ul class="collapse list-unstyled" id="typePetMenu">
+                    <li id="typePet" method="get" >
+                        <a href="/typePet" >Loài</a>
+                    </li>
+                    <li id="breed" method="get">
+                        <a href="/breed">Giống</a>
+                    </li>
+
+                </ul>
+            </li>
+
+            <li action="/ban" id="banNew" method="get" class="active" >
+                <a href="#pageSubmenu" data-toggle="collapse" class="dropdown-toggle">Báo cáo</a>
+                <ul class="collapse list-unstyled" id="pageSubmenu">
+                    <li id="ban" method="get" >
+                        <a href="/ban" >Báo cáo bài viết</a>
+                    </li>
+                    <li>
+                        <a href="/banComment">Báo cáo bình luận</a>
+                    </li>
+
+
+                </ul>
+            </li>
+
+            <li id="ban" method="get">
+                <a href="#statistical" data-toggle="collapse" class="dropdown-toggle">Thống kê</a>
+                <ul class="collapse list-unstyled" id="statistical">
+                    <li id="ban" method="get">
+                        <a href="/statisticalNew">Theo bài viết báo cáo</a>
+                    </li>
+                    <li>
+                        <a href="/statisticalComment">Theo bình luận báo cáo</a>
+                    </li>
+                </ul>
+            </li>
+
+        </ul>
+    </nav>
+
+    <div id="content">
+        <nav class="navbar navbar-expand-lg navbar-light bg-light">
+            <div class="container-fluid">
+                <button type="button" id="sidebarCollapse" class="btn btn-info" >
+                    <i class="fas fa-align-left"></i>
+                    <span>Menu</span>
+
+                </button>
+            </div>
+        </nav>
+        <div class="navbar navbar-expand-lg navbar-light bg-light" >
+            {{#each pagination}}
+                <tr>
+                    <nav aria-label="Page navigation example">
+                        <ul class="pagination">
+                            <li class="page-item"><a class="page-link" href="#">{{this}}</a></li>
+                        </ul>
+                    </nav>
+                </tr>
+
+            {{/each}}
+        </div>
+
+        <table class="table table-hover">
+            <thead class="thead-gray">
+            <tr class="bg-info">
+                <th style="color: white">Chủ sở hữu</th>
+                <th style="color: white">Nội dung</th>
+                <th style="color: white">Số lượng báo cáo</th>
+                <th style="color: white">Tác vụ</th>
+            </tr>
+            {{#each listComment}}
+                <tr>
+                    <td>{{this.account.fullName}}</td>
+                    <td>{{this.content}}</td>
+                    <td>{{this.idReporters.length}}</td>
+                    <td >
+                        <button  data-toggle="modal" data-target="#detailComment" onclick="
+                                document.getElementsByName('fullName')[0].value = '{{this.account.fullName}}';
+                                document.getElementsByName('content')[0].value = '{{this.content}}';
+                                document.getElementsByName('idReporters')[0].value = '{{this.idReporters.length}}';
+                                "type="submit" class="btn btn-primary" style="width: 80px">Xem
+                        </button>
+                        <button data-toggle="modal" data-target="#banComment" type="submit" class="btn btn-danger" onclick="
+                                document.getElementsByName('id')[0].value = '{{this._id}}';
+                                ">Thu hồi</button>
+
+                    </td>
+                </tr>
+
+            {{/each}}
+            </thead>
+        </table>
+
+
+
+    </div>
+
+</div>
+
+<form>
+    <div class="modal fade" id="detailComment" role="dialog" aria-labelledby="exampleModalLabel"
+         aria-hidden="true">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="exampleModalLabel">Thông tin</h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+
+
+                <div class="modal-body">
+                    <div class="input-group mb-3">
+                        <div class="input-group-prepend">
+                            <span class="input-group-text" id="basic-addon1"style="width: 150px">Chủ sở hữu</span>
+                        </div>
+                        <input type="text" name="fullName" disabled class="form-control" aria-describedby="basic-addon1"
+                               required>
+                    </div>
+                    <div class="input-group mb-3">
+                        <div class="input-group-prepend">
+                            <span class="input-group-text" id="basic-addon1"style="width: 150px">Nội dung</span>
+                        </div>
+                        <input type="text" name="content" disabled class="form-control"
+                               aria-describedby="basic-addon1" required>
+                    </div>
+                    <div class="input-group mb-3">
+                        <div class="input-group-prepend">
+                            <span class="input-group-text" id="basic-addon1"style="width: 150px">Số lượng báo cáo</span>
+                        </div>
+                        <input type="text" name="idReporters" disabled class="form-control"
+                               aria-describedby="basic-addon1" required>
+                    </div>
+
+                </div>
+
+            </div>
+        </div>
+    </div>
+</form>
+
+<div class="modal fade" id="banComment" tabindex="-1">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="banComment">Xác nhận thu hồi bình luận</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                Bạn có chắc muốn thu hồi bình luận này?
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-dismiss="modal">Hủy</button>
+                <form  action="/banComment/isLocked" method="post">
+                    <button type="submit" name="id" value="{{this._id}}" class="btn btn-danger" style="width: 120px">
+                        Thu hồi
+                    </button>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+</div>
+
+
+<script src="https://code.jquery.com/jquery-3.2.1.slim.min.js"
+        integrity="sha384-KJ3o2DKtIkvYIK3UENzmM7KCkRr/rE9/Qpg6aAZGJwFDMVNA/GpGFF93hXpG5KkN"
+        crossorigin="anonymous"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js"
+        integrity="sha384-ApNbgh9B+Y1QKtv3Rn7W3mgPxhU9K/ScQsAP7hUibX39j7fakFPskvXusvfa0b4Q"
+        crossorigin="anonymous"></script>
+<script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js"
+        integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl"
+        crossorigin="anonymous"></script>
+
+<script>
+
+    $(document).ready(function () {
+        $('#sidebarCollapse').on('click', function () {
+            $('#sidebar').toggleClass('active');
+            $(this).toggleClass('active');
+        });
+    });
+
+</script>
+
+
+</body>
+</html>

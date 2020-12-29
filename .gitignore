@@ -1,0 +1,8 @@
+node_modules
+uploads
+.idea
+docker-compose.yml
+.docker/data
+.dockerignore
+.package-lock.json
+.env
